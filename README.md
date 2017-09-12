@@ -1,2 +1,2 @@
 # nbai
-A prediction system for basketball statistics.
+NBAI - A prediction system for basketball statistics.
