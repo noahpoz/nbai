@@ -1,0 +1,13 @@
+div .table_container {
+	padding: 20 px;
+}
+input {
+	margin-bottom: 5px; 
+	padding: 2px 3px; 
+	width: 209px;
+}
+td {
+	padding: 4px; 
+	border: 3px #CCc solid; 
+	width: 100px;
+}
