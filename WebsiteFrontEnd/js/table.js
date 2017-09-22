@@ -1,4 +1,24 @@
-// var searchContent = document.getElementById("");
+// var searchContent = document.getElementById("search");
+// searchContent.addEventListener("input",test);
+
+// function test(){
+// 	alert("hi");
+// }
+
+
+// var $rows = $('#table tr');
+// var $input = $('#search');
+// $input.keyup(filter);
+
+// function filter() {
+//     var val = $.trim($input.val()).replace(/ +/g, ' ').toLowerCase();
+//     $rows.show().filter().hide(hideFnc);
+// }
+
+// function hideFnc() {
+//         var text = $input.text().replace(/\s+/g, ' ').toLowerCase();
+//         return !~text.indexOf(val);
+// }
 
 var $rows = $('#table tr');
 $('#search').keyup(function() {
