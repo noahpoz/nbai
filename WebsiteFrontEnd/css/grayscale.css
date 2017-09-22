@@ -100,7 +100,7 @@ a {
   padding: 200px 0;
   text-align: center;
   color: white;
-  background: url("../img/backboard.jpeg") no-repeat bottom center scroll;
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("../img/backboard.jpeg") no-repeat bottom center scroll;
   background-color: black;
   -webkit-background-size: cover;
   -moz-background-size: cover;

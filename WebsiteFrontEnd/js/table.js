@@ -26,6 +26,10 @@ $('#search').keyup(function() {
     
     $rows.show().filter(function() {
         var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        if (text.indexOf('first') === 1){
+        	return 0;
+        }
         return !~text.indexOf(val);
     }).hide();
+    $('tr : first').show();
 });
