@@ -1,5 +1,5 @@
 from baseobject import BaseObject, connection
-
+#name of table in database
 TABLE_NAME = 'player_tally'
 
 @connection.register
