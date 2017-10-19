@@ -6,6 +6,7 @@ import pymongo
 from database.connection import DATABASE_NAME, connection
 from util.players import extract_player_info
 
+
 app = flask.Flask(__name__)
 
 some_list = ['Name', 'Team', 'Position', 'Opponent', 'Our Predictions', 'Value']
