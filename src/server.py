@@ -2,15 +2,18 @@
 import argparse
 import flask
 
+
 app = flask.Flask(__name__)
 
 some_list = ['Name', 'Team', 'Position', 'Opponent', 'Our Predictions', 'Value']
 
 
-value_column_index = 5;
+name_column_index     = 0;
 position_column_index = 2;
-team_column_index= 1;
-name_column_index =0;
+team_column_index     = 1;
+value_column_index    = 5;
+
+
 
 nbai = [
     ['LeBron James', 'CLE', 'SF', 'BOS', 28, 'Overvalued'],
@@ -43,11 +46,6 @@ nbai = [
     ['Marcus Smart', 'BOS', 'PF', 'CLE', 10, 'Undervalued'],
     ['Kyle Korver', 'CLE', 'SG', 'BOS', 10, 'Overvalued'],
 ]
-#    ['Derrick Williams', 'CLE', 'PG', 'BOS', 9, 'Overvalued'],
-#    ['Zaza Pachulia', 'GSW', 'PF', 'HOU', 9, 'Overvalued'],
-#    ['Jonas Jerebko', 'BOS', 'C', 'CLE', 9, 'Overvalued'],
-#    ['Shaun Livingston', 'GSW', 'DF', 'HOU', 8, 'Overvalued']
-
 
 teamlist = ['CLE', 'GSW', 'HOU', 'BOS']
 
@@ -57,14 +55,24 @@ teamlist = ['CLE', 'GSW', 'HOU', 'BOS']
 def home_page(path):
     return flask.render_template(
         'index.html',
-        header_list=some_list,
-        website_table=nbai,
-        position_index=position_column_index,
-        team_index=team_column_index,
-        name_index=name_column_index,
-        value_index=value_column_index,
-        team_list = teamlist
+        header_list    = some_list,
+        website_table  = nbai,
+        position_index = position_column_index,
+        team_index     = team_column_index,
+        name_index     = name_column_index,
+        value_index    = value_column_index,
+        team_list      = teamlist
     )
+@app.route('/players/<playerid>')
+def player_page(playerid):
+    player = connection.PlayerRecord.find({'player_id' : playerid})
+    print(player)
+    online_users = mongo.db.users.find({'online': True})
+    return flask.render_template(
+        'players_page.html',
+        player_id = playerid
+    )
+
 
 
 def parse_args():
@@ -76,5 +84,5 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    app.run(host=args.host, port=args.port)
-
+    app.run(debug=True)
+    # app.run(host=args.host, port=args.port)
