@@ -1,6 +1,9 @@
 #!env/bin/python
 import argparse
 import flask
+import pymongo
+
+from database.connection import DATABASE_NAME, connection
 
 
 app = flask.Flask(__name__)
@@ -65,12 +68,19 @@ def home_page(path):
     )
 @app.route('/players/<playerid>')
 def player_page(playerid):
-    player = connection.PlayerRecord.find({'player_id' : playerid})
-    print(player)
-    online_users = mongo.db.users.find({'online': True})
+    player_name = connection.NBAI.player_game_log.find({'player_id' : int(playerid)}, {'player_name' : 1, '_id' : 0})[0]['player_name']
+
+    team_name   = connection.NBAI.player_game_log.find({'player_id' : int(playerid)}, {'team_name' : 1,'game_date' : 1, '_id' : 0})
+    team_name   = team_name.sort('game_date', pymongo.DESCENDING)[0]['team_name']
+
+    team_abbr   = connection.NBAI.teams.find({'team_name' : team_name}, {'team_abbr' : 1, '_id' : 0})[0]['team_abbr']
+
     return flask.render_template(
         'players_page.html',
-        player_id = playerid
+        player_id = playerid,
+        player_name = player_name,
+        team_name = team_name,
+        team_abbr = team_abbr
     )
 
 
@@ -84,5 +94,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    app.run(debug=True)
-    # app.run(host=args.host, port=args.port)
+    app.run(host=args.host, port=args.port)

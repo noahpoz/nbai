@@ -27,7 +27,8 @@
 
   <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-color:black;">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-color:black;
+    ">
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="/index.html"">NBAI</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,11 +55,11 @@
               </div>
             </div>
             <div class="col-lg-2" = style="position: absolute; z-index: 0;">
-              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Cleveland_Cavaliers_logo.svg/504px-Cleveland_Cavaliers_logo.svg.png" style="margin: 25px 25px 0px 175px; max-height: 135px; opacity: 0.5;">
+              <img src="http://i.cdn.turner.com/nba/nba/assets/logos/teams/primary/web/{{team_abbr}}.svg" style="margin: 25px 25px 0px 170px; max-width: 110px; opacity: 0.5;">
             </div>
             <div class="col-lg-4 player-info" style="width:100%; height:200px;;">
-              <h1 class="playername">Kevin Love</h1> <!-- name{{player_id}} -->
-              <h2 class="playerteam">Cleveland Cavaliers</h2>
+              <h1 class="playername">{{player_name}}</h1> <!-- name{{player_id}} -->
+              <h2 class="playerteam">{{team_name}}</h2>
               <hr style="background-color: #5bbfaa;  margin: 5px 0px;">
               <h2 class="playerteam">#0 &nbsp;|&nbsp;  PF  &nbsp;|&nbsp;  6'10"  &nbsp;|&nbsp;  251 lbs</h2>
               <h3 class="playerdata" style="margin-top:20px;">Age: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;29</h3>
