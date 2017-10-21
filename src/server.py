@@ -4,7 +4,7 @@ import flask
 import pymongo
 
 from database.connection import DATABASE_NAME, connection
-
+from util.players import extract_player_info
 
 app = flask.Flask(__name__)
 
@@ -17,44 +17,43 @@ team_column_index     = 1;
 value_column_index    = 5;
 
 
-
 nbai = [
-    ['LeBron James', 'CLE', 'SF', 'BOS', 28, 'Overvalued'],
-    ['Kevin Durant', 'GSW', 'SF', 'HOU', 26, 'Overvalued'],
-    ['Kevin Love', 'CLE', 'C', 'BOS', 22, 'Overvalued'],
-    ['Stephen Curry', 'GSW', 'PG', 'HOU', 22, 'Undervalued'],
-    ['James Harden', 'HOU', 'SG', 'GSW', 21, 'Undervalued'],
-    ['Al Horford', 'BOS', 'SF', 'CLE', 21, 'Overvalued'],
-    ['David West', 'GSW', 'PF', 'HOU', 19, 'Overvalued'],
-    ['Deron Williams', 'CLE', 'PG', 'BOS', 19, 'Overvalued'],
-    ['Kyrie Irving', 'BOS', 'PG', 'CLE', 18, 'Undervalued'],
-    ['Andre Iguodala', 'GSW', 'SF', 'HOU', 17, 'Undervalued'],
-    ['Isaiah Thomas', 'CLE', 'PG', 'BOS', 15, 'Undervalued'],
-    ['Klay Thompson', 'GSW', 'SG', 'HOU', 14, 'Undervalued'],
-    ['Eric Gordon', 'HOU', 'PF', 'GSW', 14, 'Overvalued'],
-    ['Trevor Ariza', 'HOU', 'PF', 'GSW', 14, 'Overvalued'],
-    ['Tristan Thompson', 'CLE', 'PF', 'BOS', 13, 'Undervalued'],
-    ['Ryan Anderson', 'HOU', 'PF', 'GSW', 13, 'Overvalued'],
-    ['Lou Williams', 'HOU', 'SG', 'GSW', 12, 'Overvalued'],
-    ['Amir Johnson', 'BOS', 'SF', 'CLE', 12, 'Undervalued'],
-    ['Matt Barnes', 'GSW', 'PG', 'HOU', 11, 'Undervalued'],
-    ['Tyler Zeller', 'BOS', 'PG', 'CLE', 11, 'Overvalued'],
-    ['Draymond Green', 'GSW', 'C', 'HOU', 11, 'Overvalued'],
-    ['JaVale McGee', 'GSW', 'C', 'HOU', 11, 'Overvalued'],
-    ['JR Smith', 'CLE', 'SG', 'BOS', 11, 'Undervalued'],
-    ['Patrick Beverley', 'HOU', 'PF', 'GSW', 11, 'Undervalued'],
+    ['LeBron James',      'CLE', 'SF', 'BOS', 28, 'Overvalued'],
+    ['Kevin Durant',      'GSW', 'SF', 'HOU', 26, 'Overvalued'],
+    ['Kevin Love',        'CLE', 'C',  'BOS', 22, 'Overvalued'],
+    ['Stephen Curry',     'GSW', 'PG', 'HOU', 22, 'Undervalued'],
+    ['James Harden',      'HOU', 'SG', 'GSW', 21, 'Undervalued'],
+    ['Al Horford',        'BOS', 'SF', 'CLE', 21, 'Overvalued'],
+    ['David West',        'GSW', 'PF', 'HOU', 19, 'Overvalued'],
+    ['Deron Williams',    'CLE', 'PG', 'BOS', 19, 'Overvalued'],
+    ['Kyrie Irving',      'BOS', 'PG', 'CLE', 18, 'Undervalued'],
+    ['Andre Iguodala',    'GSW', 'SF', 'HOU', 17, 'Undervalued'],
+    ['Isaiah Thomas',     'CLE', 'PG', 'BOS', 15, 'Undervalued'],
+    ['Klay Thompson',     'GSW', 'SG', 'HOU', 14, 'Undervalued'],
+    ['Eric Gordon',       'HOU', 'PF', 'GSW', 14, 'Overvalued'],
+    ['Trevor Ariza',      'HOU', 'PF', 'GSW', 14, 'Overvalued'],
+    ['Tristan Thompson',  'CLE', 'PF', 'BOS', 13, 'Undervalued'],
+    ['Ryan Anderson',     'HOU', 'PF', 'GSW', 13, 'Overvalued'],
+    ['Lou Williams',      'HOU', 'SG', 'GSW', 12, 'Overvalued'],
+    ['Amir Johnson',      'BOS', 'SF', 'CLE', 12, 'Undervalued'],
+    ['Matt Barnes',       'GSW', 'PG', 'HOU', 11, 'Undervalued'],
+    ['Tyler Zeller',      'BOS', 'PG', 'CLE', 11, 'Overvalued'],
+    ['Draymond Green',    'GSW', 'C',  'HOU', 11, 'Overvalued'],
+    ['JaVale McGee',      'GSW', 'C',  'HOU', 11, 'Overvalued'],
+    ['JR Smith',          'CLE', 'SG', 'BOS', 11, 'Undervalued'],
+    ['Patrick Beverley',  'HOU', 'PF', 'GSW', 11, 'Undervalued'],
     ['Richard Jefferson', 'CLE', 'PF', 'BOS', 11, 'Overvalued'],
-    ['Kelly Olynyk', 'BOS', 'SG', 'CLE', 11, 'Undervalued'],
-    ['Channing Frye', 'CLE', 'SF', 'BOS', 10, 'Overvalued'],
-    ['Marcus Smart', 'BOS', 'PF', 'CLE', 10, 'Undervalued'],
-    ['Kyle Korver', 'CLE', 'SG', 'BOS', 10, 'Overvalued'],
+    ['Kelly Olynyk',      'BOS', 'SG', 'CLE', 11, 'Undervalued'],
+    ['Channing Frye',     'CLE', 'SF', 'BOS', 10, 'Overvalued'],
+    ['Marcus Smart',      'BOS', 'PF', 'CLE', 10, 'Undervalued'],
+    ['Kyle Korver',       'CLE', 'SG', 'BOS', 10, 'Overvalued'],
 ]
 
 teamlist = ['CLE', 'GSW', 'HOU', 'BOS']
 
 
 @app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/index.html', defaults={'path': '/index.html'})
 def home_page(path):
     return flask.render_template(
         'index.html',
@@ -66,23 +65,23 @@ def home_page(path):
         value_index    = value_column_index,
         team_list      = teamlist
     )
+
+
 @app.route('/players/<playerid>')
 def player_page(playerid):
-    player_name = connection.NBAI.player_game_log.find({'player_id' : int(playerid)}, {'player_name' : 1, '_id' : 0})[0]['player_name']
+    player = extract_player_info(playerid)
+    if(player):
+        return flask.render_template(
+            'players_page.html',
+            player = player
+        )
+    else:
+        return flask.abort(404)
 
-    team_name   = connection.NBAI.player_game_log.find({'player_id' : int(playerid)}, {'team_name' : 1,'game_date' : 1, '_id' : 0})
-    team_name   = team_name.sort('game_date', pymongo.DESCENDING)[0]['team_name']
 
-    team_abbr   = connection.NBAI.teams.find({'team_name' : team_name}, {'team_abbr' : 1, '_id' : 0})[0]['team_abbr']
-
-    return flask.render_template(
-        'players_page.html',
-        player_id = playerid,
-        player_name = player_name,
-        team_name = team_name,
-        team_abbr = team_abbr
-    )
-
+@app.errorhandler(404)
+def page_not_found(e):
+    return flask.render_template('404.html'), 404
 
 
 def parse_args():
