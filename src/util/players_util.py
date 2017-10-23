@@ -4,7 +4,9 @@ import unicodedata
 
 from datetime import date
 from database.connection import DATABASE_NAME, connection
+from database.tables.fields import Fields as f
 from random import randint
+
 
 """
 Attemps to create a player dict containing information to be rendered.
@@ -20,7 +22,7 @@ Returns the player dict.
 """
 def extract_player_info(playerid):
     try:
-        player = connection.NBAI.players.find_one({'player_id' : int(playerid)},
+        player = connection.NBAI.players.find_one({f.player_id : int(playerid)},
          {'player_id'  : 1,
          'player_name' : 1,
          'height'      : 1,
@@ -34,12 +36,12 @@ def extract_player_info(playerid):
     except:
         return None
 
-    if not player or player['last_year'] != date.today().year :
+    if not player or player[f.last_year] != date.today().year :
         return None
-    player['team_abbr'] = get_player_team(player['team_id'])
-    player['position']  = get_player_position(player['position'])
-    player['height']    = get_player_height(player['height'])
-    player['age']       = get_player_age(player['dob'])
+    player[f.team_abbr] = get_player_team(player[f.team_id])
+    player[f.position]  = get_player_position(player[f.position])
+    player[f.height]    = get_player_height(player[f.height])
+    player['age']       = get_player_age(player[f.dob])
 
     return player
 
@@ -90,7 +92,7 @@ Returns a string - team abbreviation if found, empty string otherwise.
 """
 def get_player_team(teamid):
     try:
-        team_abbr = connection.NBAI.teams.find_one({'team_id' : int(teamid)}, {'team_abbr' : 1, '_id' : 0})['team_abbr']
+        team_abbr = connection.NBAI.teams.find_one({'team_id' : int(teamid)}, {'team_abbr' : 1, '_id' : 0})[f.team_abbr]
         return team_abbr
     except:
         return ''
@@ -108,8 +110,8 @@ def load_todays_players():
 
     todays_games = connection.NBAI.schedules.find({'game_date' : todays_date})
     for game in todays_games:
-        team_abbr = connection.NBAI.teams.find_one({'team_id' : int(game['team_id'])}, {'team_abbr' : 1, '_id' : 0})['team_abbr']
-        game_id = game['game_id']
+        team_abbr = connection.NBAI.teams.find_one({'team_id' : int(game[f.team_id])}, {'team_abbr' : 1, '_id' : 0})[f.team_abbr]
+        game_id = game[f.game_id]
         if game_id not in games:
             games[game_id] = {}
             games[game_id]['teams'] = []
@@ -129,10 +131,10 @@ def load_todays_players():
             for player in roster_ids:
                 player_item = extract_player_info(int(player))
                 if(player_item):
-                    roster.append(player_item['player_name'])
+                    roster.append(player_item[f.player_name])
                     value = ['Overvalued', 'Undervalued']
                     if(i < 2):
-                        output.append([player_item['player_name'], team_abbr, player_item['position'], opp, randint(10, 32), value[randint(0,1)]])
+                        output.append([player_item[f.player_name], team_abbr, player_item[f.position], opp, randint(10, 32), value[randint(0,1)]])
                 else:
                     continue
                 i += 1
@@ -150,6 +152,6 @@ def get_todays_games():
 
     todays_games = connection.NBAI.schedules.find({'game_date' : todays_date})
     for game in todays_games:
-        team_abbr = connection.NBAI.teams.find_one({'team_id' : int(game['team_id'])}, {'team_abbr' : 1, '_id' : 0})['team_abbr']
+        team_abbr = connection.NBAI.teams.find_one({'team_id' : int(game[f.team_id])}, {'team_abbr' : 1, '_id' : 0})[f.team_abbr]
         games.append(team_abbr)
     return games
