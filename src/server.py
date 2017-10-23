@@ -4,7 +4,8 @@ import flask
 import pymongo
 
 from database.connection import DATABASE_NAME, connection
-from util.players import extract_player_info
+from datetime import date
+from util.players_util import extract_player_info, load_todays_players
 
 
 app = flask.Flask(__name__)
@@ -17,6 +18,7 @@ position_column_index = 2;
 team_column_index     = 1;
 value_column_index    = 5;
 
+todays_players = load_todays_players()
 
 nbai = [
     ['LeBron James',      'CLE', 'SF', 'BOS', 28, 'Overvalued'],
@@ -56,10 +58,13 @@ teamlist = ['CLE', 'GSW', 'HOU', 'BOS']
 @app.route('/', defaults={'path': ''})
 @app.route('/index.html', defaults={'path': '/index.html'})
 def home_page(path):
+
+
+
     return flask.render_template(
         'index.html',
         header_list    = some_list,
-        website_table  = nbai,
+        website_table  = todays_players,
         position_index = position_column_index,
         team_index     = team_column_index,
         name_index     = name_column_index,
@@ -94,4 +99,4 @@ def parse_args():
 
 if __name__ == '__main__':
     args = parse_args()
-    app.run(host=args.host, port=args.port)
+    app.run(host=args.host, port=args.port, debug=True)
