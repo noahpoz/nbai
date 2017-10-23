@@ -139,9 +139,9 @@ def load_todays_players():
     return output
 
 """
-Loads 2 players from teams playing on the current day.
+Loads todays teams playing in games from the database.
 
-Returns a list of players, position, value, opponent.
+Returns a list team abbreviations.
 """
 def get_todays_games():
     today = date.today()
