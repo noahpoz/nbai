@@ -137,3 +137,19 @@ def load_todays_players():
                     continue
                 i += 1
     return output
+
+"""
+Loads 2 players from teams playing on the current day.
+
+Returns a list of players, position, value, opponent.
+"""
+def get_todays_games():
+    today = date.today()
+    todays_date = str(today.year) + str(today.month) + str(today.day)
+    games = []
+
+    todays_games = connection.NBAI.schedules.find({'game_date' : todays_date})
+    for game in todays_games:
+        team_abbr = connection.NBAI.teams.find_one({'team_id' : int(game['team_id'])}, {'team_abbr' : 1, '_id' : 0})['team_abbr']
+        games.append(team_abbr)
+    return games

@@ -5,13 +5,13 @@ import pymongo
 
 from database.connection import DATABASE_NAME, connection
 from datetime import date
-from util.players_util import extract_player_info, load_todays_players
+from util.players_util import extract_player_info, load_todays_players, get_todays_games
 
 
 app = flask.Flask(__name__)
 
 some_list = ['Name', 'Team', 'Position', 'Opponent', 'Our Predictions', 'Value']
-
+teamlist = get_todays_games()
 
 name_column_index     = 0;
 position_column_index = 2;
