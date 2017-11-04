@@ -104,7 +104,9 @@ Returns a list of players, position, value, opponent.
 """
 def load_todays_players():
     today = date.today()
-    todays_date = str(today.year) + str(today.month) + str(today.day)
+    today_day  = str(today.day) if today.day > 9 else '0' + str(today.day)
+    today_month = str(today.month) if today.month > 9 else '0' + str(today.month)
+    todays_date = str(today.year) + today_month + today_day
     games = {}
     output = []
 
